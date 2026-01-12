@@ -1,0 +1,68 @@
+---
+const navItems = [
+    { name: "INTEL", href: "/intel" },
+    { name: "REAL ESTATE", href: "/real-estate" },
+    { name: "SERVICES", href: "/services" },
+    { name: "ABOUT", href: "/about" },
+];
+---
+
+<nav
+    class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50"
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center">
+                <a href="/" class="flex-shrink-0 flex items-center gap-3 group">
+                    <div
+                        class="w-8 h-8 rounded-full bg-liberation-blue flex items-center justify-center text-white font-bold font-mono group-hover:bg-white group-hover:text-liberation-blue transition-colors"
+                    >
+                        51
+                    </div>
+                    <span
+                        class="text-white font-bold tracking-wider uppercase text-sm md:text-base"
+                    >
+                        Project 51
+                    </span>
+                </a>
+            </div>
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-4">
+                    {
+                        navItems.map((item) => (
+                            <a
+                                href={item.href}
+                                class="text-slate-300 hover:text-liberation-blue hover:bg-slate-800 px-3 py-2 rounded-md text-sm font-medium transition-colors uppercase tracking-wide"
+                            >
+                                {item.name}
+                            </a>
+                        ))
+                    }
+                </div>
+            </div>
+            <!-- Mobile menu button placeholder -->
+            <div class="-mr-2 flex md:hidden">
+                <button
+                    type="button"
+                    class="bg-slate-800 inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-800 focus:ring-white"
+                >
+                    <span class="sr-only">Open main menu</span>
+                    <svg
+                        class="block h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>

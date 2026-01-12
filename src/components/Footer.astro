@@ -1,0 +1,79 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-slate-950 border-t border-slate-900 py-12 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+            class="grid grid-cols-1 md:grid-cols-3 gap-8 text-slate-400 text-sm"
+        >
+            <!-- Official Seal / Branding -->
+            <div class="space-y-4">
+                <h3 class="text-white font-bold uppercase tracking-widest">
+                    Project 51
+                </h3>
+                <p class="leading-relaxed text-xs">
+                    Project 51: A Logical Evolution of Sovereignty
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="space-y-4">
+                <h3
+                    class="text-white font-bold uppercase tracking-widest text-xs"
+                >
+                    Department Links
+                </h3>
+                <ul class="space-y-2">
+                    <li>
+                        <a
+                            href="/intel"
+                            class="hover:text-liberation-blue transition-colors"
+                            >INTEL</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="/real-estate"
+                            class="hover:text-liberation-blue transition-colors"
+                            >REAL ESTATE</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="/services"
+                            class="hover:text-liberation-blue transition-colors"
+                            >SERVICES</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="/about"
+                            class="hover:text-liberation-blue transition-colors"
+                            >ABOUT</a
+                        >
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Disclaimer (Satire) -->
+            <div class="space-y-4">
+                <div class="bg-slate-900 p-4 rounded border border-slate-800">
+                    <p class="text-[10px] text-slate-500 leading-normal">
+                        <strong class="text-slate-400 uppercase"
+                            >Disclaimer:</strong
+                        >
+                        {/* Disclaimer Text */}
+                        This site is a satirical project and is not affiliated with
+                        the United States government, the Kingdom of Denmark, or any
+                        actual geopolitical entity. Not financial advice. But if it
+                        was, you’d buy now.
+                    </p>
+                </div>
+                <p class="text-xs">
+                    &copy; {currentYear} The Greenland Initiative. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>

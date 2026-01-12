@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-liberation-blue: #2563EB; /* Royal Blue */
+  --color-resistance-red: #DC2626; /* Deep Red */
+  
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace; /* For technical data look */
+}
+
+@layer base {
+  html {
+    background-color: #0f172a; /* Slate 900 - Dark mode base */
+    color: #f8fafc; /* Slate 50 */
+  }
+}
