@@ -1,0 +1,290 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const naturalResources = [
+  {
+    id: 1,
+    title: "Rare Earth Elements",
+    category: "Mineral Resources",
+    description:
+      "Greenland possesses world-class reserves of rare earth elements including neodymium and praseodymium, with deposits sufficient for decades of global supply.",
+    icon: "💎",
+    stats: ["Reserve: 38M tons", "Purity: World-class", "Potential: 50+ years"],
+  },
+  {
+    id: 2,
+    title: "Oil & Natural Gas",
+    category: "Energy Resources",
+    description:
+      "Offshore continental shelves contain abundant petroleum and natural gas reserves, with estimated volumes comparable to North Sea oil fields.",
+    icon: "⛽",
+    stats: [
+      "Est. Reserve: 50B barrels",
+      "Natural Gas: 100B m³",
+      "Exploration Zones: 5",
+    ],
+  },
+  {
+    id: 3,
+    title: "Glacial Freshwater",
+    category: "Water Resources",
+    description:
+      "World's second-largest ice sheet, storing 7% of global freshwater. Exceptionally pure and suitable as a strategic resource.",
+    icon: "🧊",
+    stats: ["Volume: 2.8M km³", "Purity: 99.9%", "Age: 100,000 years"],
+  },
+  {
+    id: 4,
+    title: "Fishery Resources",
+    category: "Marine Resources",
+    description:
+      "North Atlantic cold waters yield premium seafood including Arctic shrimp and halibut, with annual export value exceeding $1 billion.",
+    icon: "🦐",
+    stats: [
+      "Annual Catch: 200K tons",
+      "Shrimp Export: #1 Global",
+      "Fishing Grounds: 15+",
+    ],
+  },
+  {
+    id: 5,
+    title: "Geothermal Energy",
+    category: "Renewable Energy",
+    description:
+      "Active volcanic zones provide abundant geothermal resources, supplying clean heating for residents with significant power generation potential.",
+    icon: "🌋",
+    stats: [
+      "Geothermal Wells: 50+",
+      "Heating Coverage: 80%",
+      "Power Potential: 500MW",
+    ],
+  },
+  {
+    id: 6,
+    title: "Arctic Wind Power",
+    category: "Renewable Energy",
+    description:
+      "Year-round strong polar winds offer ideal conditions for wind power generation, with massive renewable energy development potential.",
+    icon: "💨",
+    stats: [
+      "Avg Wind Speed: 12m/s",
+      "Capacity: 2GW",
+      "Annual Output: 6,000GWh",
+    ],
+  },
+];
+
+const sceneries = [
+  {
+    id: 1,
+    title: "Ilulissat Icefjord",
+    location: "Ilulissat Icefjord",
+    description:
+      "UNESCO World Heritage Site featuring spectacular icebergs drifting slowly through the fjord, showcasing nature's magnificent craftsmanship.",
+    highlights: ["World Heritage", "Iceberg Wonder", "Midnight Sun"],
+  },
+  {
+    id: 2,
+    title: "Aurora Borealis Zone",
+    location: "Aurora Borealis Zone",
+    description:
+      "Located in the center of the auroral oval, with over 200 days per year to witness brilliant northern lights displays.",
+    highlights: ["Aurora Hotspot", "Year-round Views", "Photo Paradise"],
+  },
+  {
+    id: 3,
+    title: "Disko Bay",
+    location: "Disko Bay",
+    description:
+      "Capital of icebergs, where massive ice chunks calved from glaciers gather to create a dreamlike ice wonderland.",
+    highlights: ["Iceberg Central", "Whale Watching", "Inuit Culture"],
+  },
+  {
+    id: 4,
+    title: "East Greenland Fjords",
+    location: "East Greenland Fjords",
+    description:
+      "World's longest fjord system with towering cliffs and abundant wildlife, the ultimate destination for adventurers.",
+    highlights: ["Longest Fjords", "Wildlife Haven", "Explorer's Dream"],
+  },
+];
+---
+
+<Layout title="Natural Resources & Scenery | Project 51">
+  <div class="bg-slate-900 min-h-screen">
+    <!-- Hero Section -->
+    <div
+      class="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 py-16 md:py-24"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-liberation-blue/10 border border-liberation-blue/30 mb-6"
+        >
+          <span class="text-2xl">❄️</span>
+          <span
+            class="text-sm font-mono text-liberation-blue tracking-wider uppercase"
+            >Nature's Treasury</span
+          >
+        </div>
+        <h1
+          class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight"
+        >
+          Greenland's <span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-liberation-blue to-cyan-400"
+            >Natural Treasures</span
+          >
+        </h1>
+        <p class="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
+          The world's largest island, harboring boundless natural resources and
+          spectacular landscapes
+        </p>
+        <p class="text-sm text-slate-500 font-mono">
+          Resources & Scenery of the Future 51st State
+        </p>
+      </div>
+    </div>
+
+    <!-- Natural Resources Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="text-center mb-12">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center justify-center gap-3"
+        >
+          <span>🌍</span>
+          <span>Natural Resources</span>
+        </h2>
+        <p class="text-slate-400 max-w-2xl mx-auto">
+          Greenland's abundant natural resources, from rare minerals to clean
+          energy, hold tremendous economic development potential.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {
+          naturalResources.map((resource) => (
+            <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-liberation-blue transition-all hover:shadow-lg hover:shadow-liberation-blue/20 group">
+              <div class="flex items-start justify-between mb-4">
+                <span class="text-5xl group-hover:scale-110 transition-transform">
+                  {resource.icon}
+                </span>
+                <span class="text-xs font-mono text-liberation-blue px-3 py-1 bg-liberation-blue/10 rounded-full uppercase">
+                  {resource.category}
+                </span>
+              </div>
+
+              <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-liberation-blue transition-colors">
+                {resource.title}
+              </h3>
+
+              <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                {resource.description}
+              </p>
+
+              <div class="border-t border-slate-700 pt-4 space-y-2">
+                {resource.stats.map((stat) => (
+                  <div class="flex items-center text-xs text-slate-500">
+                    <svg
+                      class="w-4 h-4 text-green-400 mr-2 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span>{stat}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Natural Sceneries Section -->
+    <div class="bg-slate-800/30 py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2
+            class="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center justify-center gap-3"
+          >
+            <span>🏔️</span>
+            <span>Natural Scenery</span>
+          </h2>
+          <p class="text-slate-400 max-w-2xl mx-auto">
+            From glacial fjords to auroral spectacles, Greenland's natural
+            beauty is breathtaking, one of Earth's last pristine frontiers.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {
+            sceneries.map((scenery) => (
+              <div class="bg-slate-900/50 border border-slate-700 rounded-xl overflow-hidden hover:border-cyan-500 transition-all group">
+                <div class="h-56 bg-gradient-to-br from-cyan-900/30 via-slate-800 to-blue-900/30 relative overflow-hidden flex items-center justify-center">
+                  <div class="text-center">
+                    <div class="text-6xl mb-4 animate-pulse">🏔️</div>
+                    <p class="text-slate-500 text-sm font-mono">
+                      Spectacular Landscape
+                    </p>
+                  </div>
+                </div>
+
+                <div class="p-6">
+                  <div class="flex items-start justify-between mb-3">
+                    <h3 class="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+                      {scenery.title}
+                    </h3>
+                  </div>
+
+                  <p class="text-xs font-mono text-cyan-400 mb-3">
+                    {scenery.location}
+                  </p>
+
+                  <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                    {scenery.description}
+                  </p>
+
+                  <div class="flex flex-wrap gap-2">
+                    {scenery.highlights.map((highlight) => (
+                      <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-xs text-cyan-300">
+                        {highlight}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+      <div
+        class="bg-gradient-to-r from-liberation-blue/10 to-cyan-500/10 border border-liberation-blue/30 rounded-2xl p-8 md:p-12"
+      >
+        <h3 class="text-3xl font-bold text-white mb-4">
+          Support Greenland Joining America
+        </h3>
+        <p class="text-slate-400 mb-8 max-w-2xl mx-auto">
+          These precious natural resources and spectacular landscapes will
+          become the unique wealth of America's 51st state, making greater
+          contributions to human civilization.
+        </p>
+        <a
+          href="/#command-center"
+          class="inline-block px-8 py-4 bg-liberation-blue hover:bg-blue-600 text-white text-lg font-bold rounded-lg shadow-lg shadow-blue-900/50 transition-all transform hover:-translate-y-1"
+        >
+          Cast Your Vote →
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
