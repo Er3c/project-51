@@ -2,11 +2,24 @@ import type { APIRoute } from 'astro';
 import { hashIP } from '../../utils/security';
 
 export const GET: APIRoute = async ({ request, locals }) => {
-    let country = request.headers.get("cf-ipcountry");
-    let city = request.headers.get("cf-ipcity");
+    let country = "XX";
+    let city = "Unknown Location";
 
-    // Fallback for local development if Cloudflare headers are missing
-    if (!country) {
+    // Cloudflare Workers/Pages environment - use request.cf
+    // @ts-ignore
+    if (request.cf) {
+        // @ts-ignore
+        country = request.cf.country || "XX";
+        // @ts-ignore
+        city = request.cf.city || "Unknown";
+    }
+    // Fallback to headers (for some edge cases)
+    else if (request.headers.get("cf-ipcountry")) {
+        country = request.headers.get("cf-ipcountry") || "XX";
+        city = request.headers.get("cf-ipcity") || "Unknown";
+    }
+    // Local development fallback
+    else {
         try {
             const res = await fetch("http://ip-api.com/json/");
             if (res.ok) {
@@ -18,9 +31,6 @@ export const GET: APIRoute = async ({ request, locals }) => {
             console.error("Failed to fetch fallback location", e);
         }
     }
-
-    country = country || "XX";
-    city = city || "Unknown Location";
 
     // Check for existing vote
     let hasVoted = false;
