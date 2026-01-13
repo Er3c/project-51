@@ -1,0 +1,10 @@
+name = "project-51-greenland"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+# D1 Database Binding (Commented out until created)
+[[d1_databases]]
+binding = "DB"
+database_name = "project-51-db"
+database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"

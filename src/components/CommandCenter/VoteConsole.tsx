@@ -1,21 +1,57 @@
 import React, { useState } from 'react';
+import { triggerVoteUpdate } from '../../stores/voteStore';
 
 interface VoteConsoleProps {
     userLocation: string;
+    countryCode?: string;
+    initialHasVoted?: boolean;
+    initialVoteType?: 'yes' | 'no' | null;
 }
 
-const VoteConsole = ({ userLocation }: VoteConsoleProps) => {
+const VoteConsole = ({ userLocation, countryCode = "XX", initialHasVoted = false, initialVoteType = null }: VoteConsoleProps) => {
 
-    const [hasVoted, setHasVoted] = useState<'yes' | 'no' | null>(null);
+    const [hasVoted, setHasVoted] = useState<'yes' | 'no' | null>(initialHasVoted ? initialVoteType : null);
+
+    // Sync state if props change after mount
+    React.useEffect(() => {
+        if (initialHasVoted && initialVoteType) {
+            setHasVoted(initialVoteType);
+        }
+    }, [initialHasVoted, initialVoteType]);
+
     const [isSending, setIsSending] = useState(false);
 
-    const handleVote = (type: 'yes' | 'no') => {
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const handleVote = async (type: 'yes' | 'no') => {
         setIsSending(true);
-        // Simulate network request
-        setTimeout(() => {
-            setHasVoted(type);
+        setErrorMessage(null);
+        try {
+            const response = await fetch('/api/vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    country: countryCode,
+                    vote: type
+                }),
+            });
+
+            if (response.ok) {
+                setHasVoted(type);
+                triggerVoteUpdate();
+            } else if (response.status === 409) {
+                setErrorMessage("Identity confirmed. You have already cast your vote.");
+            } else {
+                setErrorMessage("Transmission failed. Please try again.");
+            }
+        } catch (error) {
+            console.error('Vote failed:', error);
+            setErrorMessage("Connection lost. Please try again.");
+        } finally {
             setIsSending(false);
-        }, 800);
+        }
     };
 
     if (hasVoted) {
@@ -41,7 +77,7 @@ const VoteConsole = ({ userLocation }: VoteConsoleProps) => {
     }
 
     return (
-        <div className="bg-slate-950/90 backdrop-blur border border-slate-800 rounded-xl p-6 shadow-2xl max-w-lg mx-auto transform transition-all hover:scale-[1.01]">
+        <div className="bg-slate-950/90 backdrop-blur border border-slate-800 rounded-xl p-4 sm:p-6 shadow-2xl max-w-lg mx-auto transform transition-all hover:scale-[1.01]">
             <div className="flex items-center justify-between mb-6 border-b border-slate-800 pb-4">
                 <div>
                     <h3 className="text-white font-mono font-bold uppercase tracking-widest text-sm">Command Uplink</h3>
@@ -55,7 +91,7 @@ const VoteConsole = ({ userLocation }: VoteConsoleProps) => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <button
                     disabled={isSending}
                     onClick={() => handleVote('yes')}
@@ -84,7 +120,15 @@ const VoteConsole = ({ userLocation }: VoteConsoleProps) => {
                     <span className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-slate-600 group-hover:border-red-500"></span>
                 </button>
             </div>
-        </div>
+
+            {
+                errorMessage && (
+                    <div className="mt-4 p-3 bg-red-900/20 border border-red-900/50 rounded text-red-400 text-xs text-center font-mono animate-in fade-in slide-in-from-top-2">
+                        ⚠ {errorMessage}
+                    </div>
+                )
+            }
+        </div >
     );
 };
 

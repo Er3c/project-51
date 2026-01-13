@@ -1,44 +1,70 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+export const prerender = true;
+
+const posts = await getCollection("intel");
+const sortedPosts = posts.sort(
+    (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+);
 ---
 
-<Layout>
-    <div class="py-20 px-4">
-        <div class="max-w-7xl mx-auto">
-            <h1 class="text-4xl font-bold text-white mb-10 text-center">
-                Strategic Intelligence
+<Layout title="Intel | Project 51">
+    <div class="min-h-screen py-20 px-4">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-2">
+                Intelligence Briefings
             </h1>
+            <p class="text-slate-400 mb-12">
+                Official communiques and updates from the Transition Committee.
+            </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Loop placeholder -->
+            <div class="space-y-8">
                 {
-                    [1, 2, 3].map((i) => (
-                        <article class="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden hover:border-liberation-blue transition-colors">
-                            <div class="h-48 bg-slate-800 relative">
-                                <span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                                    RESTRICTED
-                                </span>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-white mb-2">
-                                    The Economic Impact of Melting Ice
-                                    (Redacted)
+                    sortedPosts.map((post) => (
+                        <a href={`/intel/${post.slug}`} class="block group">
+                            <article class="bg-slate-800 rounded-lg p-6 border border-slate-700 group-hover:border-liberation-blue transition-colors">
+                                <div class="flex items-center gap-4 text-xs text-slate-400 mb-3 font-mono">
+                                    <span class="text-liberation-blue font-bold px-2 py-1 bg-slate-900 rounded">
+                                        {
+                                            post.data.publishDate
+                                                .toISOString()
+                                                .split("T")[0]
+                                        }
+                                    </span>
+                                    <span>
+                                        // {post.data.author.toUpperCase()}
+                                    </span>
+                                </div>
+                                <h2 class="text-2xl font-bold text-white mb-3 group-hover:text-liberation-blue transition-colors">
+                                    {post.data.title}
                                 </h2>
-                                <p class="text-slate-400 text-sm mb-4">
-                                    Analysis of the new shipping lanes and what
-                                    they mean for your commute.
+                                <p class="text-slate-300 mb-4 leading-relaxed">
+                                    {post.data.description}
                                 </p>
-                                <a
-                                    href="#"
-                                    class="text-liberation-blue font-bold text-sm hover:underline"
-                                >
-                                    Read Briefing &rarr;
-                                </a>
-                            </div>
-                        </article>
+                                <div class="flex gap-2">
+                                    {post.data.tags?.map((tag) => (
+                                        <span class="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">
+                                            #{tag}
+                                        </span>
+                                    ))}
+                                </div>
+                            </article>
+                        </a>
                     ))
                 }
             </div>
+
+            {
+                sortedPosts.length === 0 && (
+                    <div class="text-center py-20 bg-slate-800/50 rounded-lg border border-dashed border-slate-700">
+                        <p class="text-slate-500 font-mono">
+                            NO INTEL FOUND. SECURE CHANNEL STANDING BY.
+                        </p>
+                    </div>
+                )
+            }
         </div>
     </div>
 </Layout>

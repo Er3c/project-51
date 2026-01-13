@@ -1,5 +1,6 @@
 ---
 const navItems = [
+    { name: "HOME", href: "/" },
     { name: "INTEL", href: "/intel" },
     { name: "REAL ESTATE", href: "/real-estate" },
     { name: "SERVICES", href: "/services" },
@@ -40,10 +41,11 @@ const navItems = [
                     }
                 </div>
             </div>
-            <!-- Mobile menu button placeholder -->
+            <!-- Mobile menu button -->
             <div class="-mr-2 flex md:hidden">
                 <button
                     type="button"
+                    id="mobile-menu-button"
                     class="bg-slate-800 inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-800 focus:ring-white"
                 >
                     <span class="sr-only">Open main menu</span>
@@ -65,4 +67,33 @@ const navItems = [
             </div>
         </div>
     </div>
+
+    <!-- Mobile Menu, show/hide based on menu state. -->
+    <div class="hidden md:hidden" id="mobile-menu">
+        <div
+            class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-slate-800 bg-slate-900/95 backdrop-blur-md"
+        >
+            {
+                navItems.map((item) => (
+                    <a
+                        href={item.href}
+                        class="text-slate-300 hover:text-white hover:bg-slate-700 block px-3 py-2 rounded-md text-base font-medium uppercase tracking-wide"
+                    >
+                        {item.name}
+                    </a>
+                ))
+            }
+        </div>
+    </div>
 </nav>
+
+<script>
+    const btn = document.getElementById("mobile-menu-button");
+    const menu = document.getElementById("mobile-menu");
+
+    if (btn && menu) {
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+    }
+</script>

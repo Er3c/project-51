@@ -1,15 +1,28 @@
-import React, { useRef, useState, useEffect } from 'react';
-import QRCode from 'qrcode';
+import React, { useRef, useState } from 'react';
 
 const IdGenerator = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
     const [generated, setGenerated] = useState(false);
+    const [userImage, setUserImage] = useState<string | null>(null);
 
     // Constants for card design
     const CARD_WIDTH = 600;
     const CARD_HEIGHT = 380;
+
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                if (event.target?.result) {
+                    setUserImage(event.target.result as string);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const drawCard = async () => {
         if (!canvasRef.current) return;
@@ -50,17 +63,57 @@ const IdGenerator = () => {
         ctx.letterSpacing = '2px';
         ctx.fillText('PROVISIONAL DRIVER LICENSE', CARD_WIDTH / 2, 60);
 
-        // User Photo Placeholder (Polar Bear Silhouette)
-        ctx.fillStyle = '#cbd5e1';
-        ctx.fillRect(40, 100, 150, 180);
-        ctx.strokeStyle = '#475569';
-        ctx.strokeRect(40, 100, 150, 180);
+        // User Photo
+        if (userImage) {
+            const img = new Image();
+            img.src = userImage;
+            await new Promise((resolve) => {
+                img.onload = () => {
+                    // Aspect ratio preserving crop/fill (simplistic center crop)
+                    const aspect = img.width / img.height;
+                    const targetAspect = 150 / 180;
+                    let drawWidth, drawHeight, offsetX, offsetY;
 
-        // "Photo not found" text
-        ctx.fillStyle = '#64748b';
-        ctx.font = '10px monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText('NO IMAGE', 40 + 75, 100 + 90);
+                    if (aspect > targetAspect) {
+                        // Image is wider than target
+                        drawHeight = 180;
+                        drawWidth = 180 * aspect;
+                        offsetX = 40 - (drawWidth - 150) / 2;
+                        offsetY = 100;
+                    } else {
+                        // Image is taller than target
+                        drawWidth = 150;
+                        drawHeight = 150 / aspect;
+                        offsetX = 40;
+                        offsetY = 100 - (drawHeight - 180) / 2;
+                    }
+
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(40, 100, 150, 180);
+                    ctx.clip();
+                    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+                    ctx.restore();
+
+                    ctx.strokeStyle = '#475569';
+                    ctx.strokeRect(40, 100, 150, 180);
+                    resolve(null);
+                };
+                img.onerror = () => resolve(null); // Continue if image fails
+            });
+        } else {
+            // User Photo Placeholder (Polar Bear Silhouette)
+            ctx.fillStyle = '#cbd5e1';
+            ctx.fillRect(40, 100, 150, 180);
+            ctx.strokeStyle = '#475569';
+            ctx.strokeRect(40, 100, 150, 180);
+
+            // "Photo not found" text
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('NO IMAGE', 40 + 75, 100 + 90);
+        }
 
         // User Details
         ctx.textAlign = 'left';
@@ -98,17 +151,24 @@ const IdGenerator = () => {
 
         // QR Code
         try {
+            // Dynamic import to prevent hydration issues
+            const QRCode = (await import('qrcode')).default;
             const qrDataUrl = await QRCode.toDataURL('https://project51.pages.dev');
-            const qrImage = new Image();
-            qrImage.src = qrDataUrl;
-            qrImage.onload = () => {
-                ctx.drawImage(qrImage, 480, 250, 100, 100);
-                setLoading(false);
-                setGenerated(true);
-            };
+
+            await new Promise((resolve) => {
+                const qrImage = new Image();
+                qrImage.src = qrDataUrl;
+                qrImage.onload = () => {
+                    ctx.drawImage(qrImage, 480, 250, 100, 100);
+                    resolve(null);
+                };
+                qrImage.onerror = () => {
+                    console.error("QR Image failed to load");
+                    resolve(null); // Continue anyway
+                };
+            });
         } catch (err) {
             console.error(err);
-            setLoading(false);
         }
 
         // Footer Warning
@@ -116,22 +176,10 @@ const IdGenerator = () => {
         ctx.fillStyle = '#ef4444'; // Red-500
         ctx.textAlign = 'center';
         ctx.fillText('NOT FOR OFFICIAL TRAVEL. VALID IN METAVERSE ONLY.', CARD_WIDTH / 2, CARD_HEIGHT - 20);
-    };
 
-    useEffect(() => {
-        // Initial draw to clear/setup
-        if (canvasRef.current) {
-            const ctx = canvasRef.current.getContext('2d');
-            if (ctx) {
-                ctx.fillStyle = '#f8fafc';
-                ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
-                ctx.font = '14px sans-serif';
-                ctx.fillStyle = '#94a3b8';
-                ctx.textAlign = 'center';
-                ctx.fillText('ID Preview will appear here', CARD_WIDTH / 2, CARD_HEIGHT / 2);
-            }
-        }
-    }, []);
+        setLoading(false);
+        setGenerated(true);
+    };
 
     const handleGenerate = () => {
         if (!name.trim()) return;
@@ -147,47 +195,68 @@ const IdGenerator = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            <div className="bg-slate-800 p-6 rounded-lg border border-slate-700">
-                <h3 className="text-xl font-bold text-white mb-4">Applicant Details</h3>
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-slate-400 mb-1">Full Name</label>
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-white focus:border-liberation-blue focus:ring-1 focus:ring-liberation-blue outline-none"
-                            placeholder="e.g. John Doe"
-                            maxLength={20}
-                        />
+        <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-slate-800 p-8 rounded-lg border border-slate-700 h-full flex flex-col justify-between">
+                <div>
+                    <h3 className="text-xl font-bold text-white mb-6 text-center">Applicant Details</h3>
+                    <div className="space-y-6">
+                        <div>
+                            <label className="block text-sm font-medium text-slate-400 mb-2 text-center">Full Name</label>
+                            <input
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-liberation-blue focus:ring-1 focus:ring-liberation-blue outline-none text-center"
+                                placeholder="e.g. John Doe"
+                                maxLength={20}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-400 mb-2 text-center">Photo (Optional)</label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                className="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-slate-700 file:text-white hover:file:bg-slate-600 cursor-pointer"
+                            />
+                        </div>
                     </div>
+                </div>
+
+                <div className="mt-8">
                     <button
+                        type="button"
                         onClick={handleGenerate}
-                        className="w-full py-3 bg-liberation-blue hover:bg-blue-600 text-white font-bold rounded transition-colors"
+                        disabled={!name.trim() || loading}
+                        className="w-full py-4 bg-liberation-blue hover:bg-blue-600 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-bold rounded transition-colors"
                     >
-                        Generate ID
+                        {loading ? 'Processing...' : 'Generate ID'}
                     </button>
                 </div>
             </div>
 
-            <div className="space-y-4">
-                <div className="bg-slate-200 rounded-lg overflow-hidden border-4 border-slate-300 shadow-xl">
+            <div className="bg-slate-800 p-6 rounded-lg border border-slate-700 flex flex-col items-center justify-center h-full min-h-[400px]">
+                <div className="bg-slate-200 rounded-lg overflow-hidden border-4 border-slate-300 shadow-xl mb-6 max-w-full">
                     <canvas
                         ref={canvasRef}
                         width={600}
                         height={380}
                         className="w-full h-auto block"
+                        style={{ maxWidth: '100%' }}
                     />
                 </div>
-                {generated && (
+                {generated ? (
                     <button
                         onClick={handleDownload}
-                        className="w-full py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded transition-colors flex items-center justify-center gap-2"
+                        className="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded transition-colors flex items-center justify-center gap-2 shadow-lg"
                     >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         Download Digital License
                     </button>
+                ) : (
+                    <div className="w-full py-4 border-2 border-dashed border-slate-600 rounded-lg flex items-center justify-center text-slate-500 text-sm">
+                        Preview will appear here
+                    </div>
                 )}
             </div>
         </div>
