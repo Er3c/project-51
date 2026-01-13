@@ -11,44 +11,99 @@ const sortedPosts = posts.sort(
 ---
 
 <Layout title="Intel | Project 51">
-    <div class="min-h-screen py-20 px-4">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl font-bold text-white mb-2">
-                Intelligence Briefings
-            </h1>
-            <p class="text-slate-400 mb-12">
-                Official communiques and updates from the Transition Committee.
-            </p>
+    <div class="bg-slate-900 min-h-screen">
+        <!-- Hero Section -->
+        <div
+            class="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 py-16 md:py-20"
+        >
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 mb-6"
+                >
+                    <span class="text-2xl">🔒</span>
+                    <span
+                        class="text-sm font-mono text-red-400 tracking-wider uppercase"
+                        >Classified Intel</span
+                    >
+                </div>
+                <h1
+                    class="text-4xl md:text-5xl font-black text-white mb-4 leading-tight"
+                >
+                    Intelligence <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-liberation-blue to-cyan-400"
+                        >Briefings</span
+                    >
+                </h1>
+                <p class="text-lg text-slate-400 max-w-2xl mx-auto mb-2">
+                    Official communiqués and updates from the Transition
+                    Committee
+                </p>
+                <p class="text-xs text-slate-600 font-mono">
+                    SECURITY CLEARANCE: PUBLIC // DISTRIBUTION: UNRESTRICTED
+                </p>
+            </div>
+        </div>
 
-            <div class="space-y-8">
+        <!-- Intel Posts -->
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="space-y-6">
                 {
-                    sortedPosts.map((post) => (
-                        <a href={`/intel/${post.slug}`} class="block group">
-                            <article class="bg-slate-800 rounded-lg p-6 border border-slate-700 group-hover:border-liberation-blue transition-colors">
-                                <div class="flex items-center gap-4 text-xs text-slate-400 mb-3 font-mono">
-                                    <span class="text-liberation-blue font-bold px-2 py-1 bg-slate-900 rounded">
-                                        {
-                                            post.data.publishDate
-                                                .toISOString()
-                                                .split("T")[0]
-                                        }
-                                    </span>
-                                    <span>
-                                        // {post.data.author.toUpperCase()}
-                                    </span>
-                                </div>
-                                <h2 class="text-2xl font-bold text-white mb-3 group-hover:text-liberation-blue transition-colors">
-                                    {post.data.title}
-                                </h2>
-                                <p class="text-slate-300 mb-4 leading-relaxed">
-                                    {post.data.description}
-                                </p>
-                                <div class="flex gap-2">
-                                    {post.data.tags?.map((tag) => (
-                                        <span class="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">
-                                            #{tag}
-                                        </span>
-                                    ))}
+                    sortedPosts.map((post, index) => (
+                        <a
+                            href={`/intel/${post.slug}`}
+                            class="block group"
+                        >
+                            <article class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl overflow-hidden hover:border-liberation-blue transition-all hover:shadow-lg hover:shadow-liberation-blue/10">
+                                <div class="p-6 md:p-8">
+                                    <!-- Header -->
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-liberation-blue/10 border border-liberation-blue/30 text-liberation-blue font-bold text-lg">
+                                                {String(index + 1).padStart(2, '0')}
+                                            </div>
+                                            <div>
+                                                <div class="text-xs font-mono text-slate-500 uppercase tracking-wider">
+                                                    Communiqué
+                                                </div>
+                                                <div class="text-sm font-mono text-liberation-blue">
+                                                    {post.data.publishDate.toISOString().split("T")[0]}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-xs font-mono text-slate-500">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                            </svg>
+                                            <span class="uppercase">{post.data.author}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-liberation-blue transition-colors">
+                                        {post.data.title}
+                                    </h2>
+
+                                    <!-- Description -->
+                                    <p class="text-slate-300 text-base leading-relaxed mb-4">
+                                        {post.data.description}
+                                    </p>
+
+                                    <!-- Tags & Read More -->
+                                    <div class="flex flex-wrap items-center justify-between gap-4">
+                                        <div class="flex flex-wrap gap-2">
+                                            {post.data.tags?.map((tag) => (
+                                                <span class="px-3 py-1 bg-slate-700/50 border border-slate-600 text-slate-300 text-xs rounded-full font-medium">
+                                                    #{tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <div class="flex items-center gap-2 text-liberation-blue text-sm font-semibold group-hover:gap-3 transition-all">
+                                            <span>Read Brief</span>
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
                                 </div>
                             </article>
                         </a>
@@ -58,9 +113,13 @@ const sortedPosts = posts.sort(
 
             {
                 sortedPosts.length === 0 && (
-                    <div class="text-center py-20 bg-slate-800/50 rounded-lg border border-dashed border-slate-700">
-                        <p class="text-slate-500 font-mono">
-                            NO INTEL FOUND. SECURE CHANNEL STANDING BY.
+                    <div class="text-center py-20 bg-slate-800/30 rounded-xl border-2 border-dashed border-slate-700">
+                        <div class="text-6xl mb-4">🔒</div>
+                        <p class="text-slate-400 font-mono text-lg mb-2">
+                            NO INTEL AVAILABLE
+                        </p>
+                        <p class="text-slate-600 text-sm font-mono">
+                            Secure channel standing by for classified briefings
                         </p>
                     </div>
                 )

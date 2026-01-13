@@ -82,6 +82,7 @@ const sceneries = [
     description:
       "UNESCO World Heritage Site featuring spectacular icebergs drifting slowly through the fjord, showcasing nature's magnificent craftsmanship.",
     highlights: ["World Heritage", "Iceberg Wonder", "Midnight Sun"],
+    image: "/images/scenery/Ilulissat Greenland.jpg",
   },
   {
     id: 2,
@@ -90,6 +91,7 @@ const sceneries = [
     description:
       "Located in the center of the auroral oval, with over 200 days per year to witness brilliant northern lights displays.",
     highlights: ["Aurora Hotspot", "Year-round Views", "Photo Paradise"],
+    image: "/images/scenery/Northern Lights Greenland.jpg",
   },
   {
     id: 3,
@@ -98,6 +100,7 @@ const sceneries = [
     description:
       "Capital of icebergs, where massive ice chunks calved from glaciers gather to create a dreamlike ice wonderland.",
     highlights: ["Iceberg Central", "Whale Watching", "Inuit Culture"],
+    image: "/images/scenery/Disko Bay Greenland.jpg",
   },
   {
     id: 4,
@@ -106,6 +109,7 @@ const sceneries = [
     description:
       "World's longest fjord system with towering cliffs and abundant wildlife, the ultimate destination for adventurers.",
     highlights: ["Longest Fjords", "Wildlife Haven", "Explorer's Dream"],
+    image: "/images/scenery/Greenland Fjord.jpg",
   },
 ];
 ---
@@ -226,13 +230,13 @@ const sceneries = [
           {
             sceneries.map((scenery) => (
               <div class="bg-slate-900/50 border border-slate-700 rounded-xl overflow-hidden hover:border-cyan-500 transition-all group">
-                <div class="h-56 bg-gradient-to-br from-cyan-900/30 via-slate-800 to-blue-900/30 relative overflow-hidden flex items-center justify-center">
-                  <div class="text-center">
-                    <div class="text-6xl mb-4 animate-pulse">🏔️</div>
-                    <p class="text-slate-500 text-sm font-mono">
-                      Spectacular Landscape
-                    </p>
-                  </div>
+                <div class="h-56 relative overflow-hidden">
+                  <img
+                    src={scenery.image}
+                    alt={scenery.title}
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
                 </div>
 
                 <div class="p-6">
