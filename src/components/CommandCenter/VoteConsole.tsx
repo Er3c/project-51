@@ -66,12 +66,6 @@ const VoteConsole = ({ userLocation, countryCode = "XX", initialHasVoted = false
                         ? `Your support from ${userLocation} has been logged.`
                         : `Dissent recorded from ${userLocation}.`}
                 </p>
-                <button
-                    onClick={() => setHasVoted(null)}
-                    className="mt-6 text-xs text-slate-500 hover:text-white underline"
-                >
-                    Vote again (Dev Mode)
-                </button>
             </div>
         );
     }
