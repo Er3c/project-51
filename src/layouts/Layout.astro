@@ -52,6 +52,20 @@ import "../styles/global.css";
 			async
 			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4649805550645905"
 			crossorigin="anonymous"></script>
+
+		<!-- Google Analytics 4 -->
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("js", new Date());
+			gtag("config", "G-GBXPNFWJJJ"); // Replace with your GA4 Measurement ID
+		</script>
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=G-GBXPNFWJJJ"
+		></script>
 	</head>
 	<body
 		class="bg-slate-900 text-slate-50 font-sans antialiased selection:bg-liberation-blue selection:text-white flex flex-col min-h-screen"
