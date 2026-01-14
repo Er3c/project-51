@@ -9,7 +9,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://project-51.pages.dev',
+  site: 'https://project-51-39r.pages.dev',
   output: 'server',
   adapter: cloudflare({
     platformProxy: {
